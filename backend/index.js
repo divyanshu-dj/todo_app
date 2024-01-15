@@ -4,14 +4,21 @@ const express = require('express');
 const app = express();
 
 const { createTodoSchema, updateTodoSchema } = require('./types');
+const { todo } = require('./db');
 
 app.use(express.json());
 
-app.post('/todos', (req, res) => {
+app.post('/todos', async (req, res) => {
     try {
         const todo = createTodoSchema.parse(req.body);
         console.log(todo);
-        res.sendStatus(200);
+        await todo.create({
+            title: todo.title,
+            description: todo.description,
+            completed: false
+        });
+        
+        res.status(200).json("Todo created");
     } catch (error) {
         console.log(error);
         res.sendStatus(400);
@@ -19,15 +26,25 @@ app.post('/todos', (req, res) => {
 
 });
 
-app.get('/todos', (req, res) => {
-
+app.get('/todos', async (req, res) => {
+    try{
+        const todos = await todo.find();
+        res.status(200).json(todos);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
-app.put('/completed', (req, res) => {
+app.put('/completed', async (req, res) => {
     try {
         const updateTodo = updateTodoSchema.safeParse(req.body);
         console.log(updateTodo);
-        res.sendStatus(200);
+        await todo.update({
+            _id: updateTodo.id
+        }, {
+            completed: true
+        });
     } catch (error) {
         console.log(error);
         res.sendStatus(400);
