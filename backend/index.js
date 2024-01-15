@@ -8,30 +8,29 @@ const { todo } = require('./db');
 
 app.use(express.json());
 
-app.post('/todos', async (req, res) => {
+app.post('/todo', async (req, res) => {
     try {
-        const todo = createTodoSchema.parse(req.body);
-        console.log(todo);
+        const todoData = createTodoSchema.parse(req.body);
+        console.log(todoData);
         await todo.create({
-            title: todo.title,
-            description: todo.description,
+            title: todoData.title,
+            description: todoData.description,
             completed: false
         });
-        
-        res.status(200).json("Todo created");
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
 
+        res.status(200).json({ message: "Todo created" });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: 'Invalid Input' });
+    }
 });
 
 app.get('/todos', async (req, res) => {
-    try{
+    try {
         const todos = await todo.find();
         res.status(200).json(todos);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -40,17 +39,17 @@ app.put('/completed', async (req, res) => {
     try {
         const updateTodo = updateTodoSchema.safeParse(req.body);
         console.log(updateTodo);
-        await todo.update({
-            _id: updateTodo.id
-        }, {
-            completed: true
-        });
+        await todo.updateOne(
+            { _id: updateTodo.id },
+            { completed: true }
+        );
+        res.status(200).json({ message: "Todo updated successfully" });
     } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
+        console.error(error);
+        res.status(400).json({ error: 'Invalid Input' });
     }
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server is running`);
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
