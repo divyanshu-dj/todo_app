@@ -50,3 +50,7 @@ app.put('/completed', async (req, res) => {
         res.sendStatus(400);
     }
 });
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running`);
+});
