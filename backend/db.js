@@ -15,4 +15,3 @@ const todo = mongoose.model('Todo', todoSchema);
 module.exports = {
     todo
 }
-
