@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const CreateTodo = () => {
+const CreateTodo = ({todos, setTodos}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
@@ -47,9 +47,11 @@ const CreateTodo = () => {
           const createdTodo = await response.json();
     
           // Optionally update the local state with the newly created todo
-          if (onTodoAdd) {
-            onTodoAdd(createdTodo);
-          }
+          setTodos((prevTodos) => [...prevTodos, {
+            title: title,
+            description: description,
+            completed: false,
+          }]);
     
           // Clear the input fields
           setTitle('');

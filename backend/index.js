@@ -18,7 +18,7 @@ app.post('/todo', async (req, res) => {
         await todo.create({
             title: todoData.title,
             description: todoData.description,
-            completed: false
+            completed: "false"
         });
 
         res.status(200).json({ message: "Todo created" });
@@ -44,7 +44,8 @@ app.put('/completed', async (req, res) => {
         console.log(updateTodo);
         await todo.updateOne(
             { _id: updateTodo.id },
-            { completed: true }
+            { completed: true },
+            { new: true }
         );
         res.status(200).json({ message: "Todo updated successfully" });
     } catch (error) {
