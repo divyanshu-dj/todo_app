@@ -14,12 +14,16 @@ function App() {
             })
             .catch((err) => console.log(err));
     }, []);
+
+    const handleTodoAdd = (newTodo) => {
+        setTodos((prevTodos) => [...prevTodos, newTodo]);
+    };
       
 
     return (
         <div>
-            <CreateTodo />
-            <Todos todos={todos} />
+            <CreateTodo onTodoAdd={handleTodoAdd} />
+            <Todos todos={todos} setTodos={setTodos} />
         </div>
     );
 }
