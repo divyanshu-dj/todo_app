@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 const Todos = ({ todos, setTodos }) => {
-    const [id, setID] = useState("");
+    
     const handleToggleComplete = async (id) => {
         setTodos((prevTodos) =>
             prevTodos.map((todo) =>
@@ -36,13 +36,13 @@ const Todos = ({ todos, setTodos }) => {
         }
     };
 
-    return (
+    return ( 
         <div>
             {todos.map((todo) => (
                 <div key={todo._id}>
                     <h1>{todo.title}</h1>
                     <p>{todo.description}</p>
-                    <button onClick={() => { handleToggleComplete(todo._id); setID(() => todo._id); }}>
+                    <button onClick={() => { handleToggleComplete(todo._id)}}>
                         {todo.completed === true
                             ? "Completed"
                             : "Mark as complete"}
