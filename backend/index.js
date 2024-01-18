@@ -30,7 +30,7 @@ app.post('/todo', async (req, res) => {
 
 app.get('/todos', async (req, res) => {
     try {
-        const todos = await todo.find();
+        const todos = await todo.find().sort({ createdAt: -1 });
         res.status(200).json(todos);
     } catch (error) {
         console.error(error);
@@ -38,12 +38,13 @@ app.get('/todos', async (req, res) => {
     }
 });
 
+
+
 app.put('/completed', async (req, res) => {
     try {
         const updateTodo = updateTodoSchema.safeParse(req.body);
-        console.log(updateTodo);
-        await todo.updateOne(
-            { _id: updateTodo.id },
+        const completetodo =  await todo.updateOne(
+            { _id: updateTodo.data.id },
             { completed: true },
             { new: true }
         );

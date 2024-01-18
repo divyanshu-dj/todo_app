@@ -47,15 +47,11 @@ const CreateTodo = ({todos, setTodos}) => {
           const createdTodo = await response.json();
     
           // Optionally update the local state with the newly created todo
-          setTodos((prevTodos) => [...prevTodos, {
+          setTodos((prevTodos) => [{
             title: title,
             description: description,
             completed: false,
-          }]);
-    
-          // Clear the input fields
-          setTitle('');
-          setDescription('');
+          },...prevTodos]);
         } catch (error) {
           console.error(error);
           // Handle the error if needed
